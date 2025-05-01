@@ -5,8 +5,14 @@ const createCategory = async (req, res) => {
   try {
     const { title, desc, user } = req.body;
 
+    console.log(req.userInfo);
+
     if (!title || !desc || !user) {
       return res.status(400).json({ message: "Please fill all the fields" });
+    }
+
+    if (req.userInfo.id !== user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const userObj = await User.findOne({ _id: user });

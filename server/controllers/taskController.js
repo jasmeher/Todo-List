@@ -5,8 +5,13 @@ const Category = require("../models/Category");
 const createTask = async (req, res) => {
   try {
     const { title, desc, date, user, cId } = req.body;
+
     if (!title || !desc || !date || !user || !cId) {
       return res.status(400).json({ message: "Please fill all the fields" });
+    }
+
+    if (req.userInfo.id !== user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const userObj = await User.findOne({ _id: user });
